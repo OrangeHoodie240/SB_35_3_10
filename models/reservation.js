@@ -16,6 +16,28 @@ class Reservation {
     this.notes = notes;
   }
 
+
+  async save(){
+    let statement = ''; 
+    let args = [this.customerId, this.numGuests, this.startAt, this.notes];
+    if(this.id === undefined){
+      statement =  `INSERT INTO reservations(customer_id, num_guests, start_at, notes)
+                    VALUES($1, $2, $3, $4);`
+    }
+    else{
+      statement = `UPDATE reservations
+                   SET customer_id=$1, num_guests=$2, 
+                    start_at=$3, notes='$4'
+                   WHERE id=$5`;
+      args.push(this.id); 
+    }
+    
+    const resp = await db.query(statement, args); 
+
+    
+    
+  }
+
   /** formatter for startAt */
 
   getformattedStartAt() {
